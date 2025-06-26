@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <style>
+        /* CSS for the motivational quote section */
+        #quote-section {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #4CAF50;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #quote-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        #quote-text {
+            font-size: 1.125rem;
+            color: #fff;
+            font-style: italic;
+        }
+
+        nav {
+            background-color: #ffffff;
+            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a, nav button {
+            color: #4A4A4A;
+        }
+
+        nav a:hover, nav button:hover {
+            color: #4CAF50;
+        }
+
+        .navbar-icons i {
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-icons i:hover {
+            transform: scale(1.1);
+        }
+
+        body {
+            background-color: #F7FAFC;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen bg-gray-100" onload="updateProgress()">
+    <!-- Progress Circle in Top Right Corner -->
+    <div class="absolute top-4 right-4 flex items-center">
+        <svg width="50" height="50" viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg" d="M18 2.0845a 15.9155 15.9155 0 1 1 0 31.831" fill="none" stroke="#eee" stroke-width="3" />
+            <path id="progress-circle" class="circle" d="M18 2.0845a 15.9155 15.9155 0 1 1 0 31.831" fill="none" stroke="#4CAF50" stroke-width="3" stroke-dasharray="0, 100" />
+        </svg>
+        <div class="ml-2 text-sm font-bold text-gray-700">
+            <div id="progress-text">0%</div>
+            <div class="text-xs text-gray-500">Daily Progress</div>
+        </div>
+    </div>
+
+    <!-- Motivational Quote Section -->
+    <div id="quote-section" class="bg-green-500 p-6 rounded-lg shadow-md text-center">
+        <h3 class="text-xl font-bold text-white mb-4">Your Daily Motivation</h3>
+        <p id="quote-text" class="text-lg text-white italic">Loading quote...</p>
+    </div>
+
+    <!-- Static Welcome Text -->
+    <div class="flex items-start justify-center mt-16">
+        <h2 class="text-3xl font-bold text-gray-800">Welcome, Student!</h2>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
+        <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-clock text-2xl"></i>
+            <span class="text-sm">Upcoming</span>
+        </a>
+        <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-home text-2xl"></i>
+            <span class="text-sm">Home</span>
+        </a>
+        <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-chart-line text-2xl"></i>
+            <span class="text-sm">Grade Tracker</span>
+        </a>
+        <button onclick="window.location.href='leaderboard.html'" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-trophy text-2xl"></i>
+            <span class="text-sm">Leaderboard</span>
+        </button>
+    </nav>
+
+    <script>
+        // List of motivational quotes
+        const quotes = [
+            "Believe you can and you're halfway there.",
+            "The only way to do great work is to love what you do.",
+            "Success is not the key to happiness. Happiness is the key to success.",
+            "Don’t watch the clock; do what it does. Keep going.",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Your time is limited, so don’t waste it living someone else’s life.",
+            "The only limit to our realization of tomorrow is our doubts of today.",
+            "Hardships often prepare ordinary people for an extraordinary destiny."
+        ];
+
+        function showDailyQuote() {
+            const today = new Date();
+            const quoteIndex = today.getDate() % quotes.length;
+            const dailyQuote = quotes[quoteIndex];
+            document.getElementById('quote-text').innerText = dailyQuote;
+        }
+
+        window.onload = showDailyQuote;
+    </script>
+
+    <h1>home page</h1><br>
+
+    <!-- Navigation Links -->
+    <div class="flex justify-center mt-10 space-x-6 text-blue-600 underline">
+        <a href="file:///C:/Users/user/Downloads/leaderboard1.html">leaderboard</a>
+        <a href="file:///C:/Users/user/Downloads/Grade%20tracker%201.html">Grade tracker</a>
+        <a href="file:///C:/Users/user/Downloads/up%20coming%201.html">Up coming</a>
+    </div>
+</body>
+</html>
