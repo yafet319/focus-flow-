@@ -11,7 +11,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0,0,0,0.5);
       z-index: 50;
     }
   </style>
@@ -29,7 +29,7 @@
     <span class="text-sm font-semibold">Add New Subject</span>
   </button>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Navigation Bar (matching homepage style) -->
   <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
     <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-clock text-2xl"></i>
@@ -39,9 +39,9 @@
       <i class="fas fa-home text-2xl"></i>
       <span class="text-sm">Home</span>
     </a>
-    <a href="grade-tracker.html" class="flex flex-col items-center text-blue-600">
+    <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-chart-line text-2xl"></i>
-      <span class="text-sm font-semibold text-blue-600">Grade Tracker</span>
+      <span class="text-sm">Grade Tracker</span>
     </a>
     <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-trophy text-2xl"></i>
@@ -77,102 +77,94 @@
     </div>
   </div>
 
-<script>
-let selectedSubject = '';
+  <script>
+    let selectedSubject = '';
 
-// Load subjects from localStorage and sort them
-function loadSubjects() {
-  const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
-  const list = document.getElementById('subjects-list');
-  list.innerHTML = '';
+    function loadSubjects() {
+      const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+      const list = document.getElementById('subjects-list');
+      list.innerHTML = '';
 
-  subjects.sort((a, b) => b.grade - a.grade);
+      subjects.sort((a, b) => b.grade - a.grade);
 
-  subjects.forEach((subject, index) => {
-    const div = document.createElement('div');
-    div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-blue-50 transition-all";
-    div.innerHTML = `
-      <div class="flex items-center">
-        <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
-        <div>
-          <h2 class="text-xl font-semibold text-gray-800">${subject.name}</h2>
-          <p class="text-sm text-gray-500">Current Grade: <span id="${subject.name}-grade" class="font-bold">${subject.grade}%</span></p>
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-4 py-2 rounded-full border-2 border-blue-600">Add Grade</button>
-        <button onclick="deleteSubject('${subject.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
-      </div>
-    `;
-    list.appendChild(div);
-  });
-}
-
-function openGradeInput(subject) {
-  selectedSubject = subject;
-  document.getElementById('grade-input-modal').style.display = 'flex';
-}
-
-function closeGradeInput() {
-  document.getElementById('grade-input-modal').style.display = 'none';
-  document.getElementById('grade').value = '';
-}
-
-function submitGrade() {
-  const newGrade = parseFloat(document.getElementById('grade').value);
-  if (!isNaN(newGrade) && newGrade >= 0 && newGrade <= 100) {
-    const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
-    const subject = subjects.find(sub => sub.name === selectedSubject);
-    if (subject) {
-      subject.grade = newGrade.toFixed(2);
-      localStorage.setItem('subjects', JSON.stringify(subjects));
-      loadSubjects();
-      closeGradeInput();
+      subjects.forEach((subject, index) => {
+        const div = document.createElement('div');
+        div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-blue-50 transition-all";
+        div.innerHTML = `
+          <div class="flex items-center">
+            <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
+            <div>
+              <h2 class="text-xl font-semibold text-gray-800">${subject.name}</h2>
+              <p class="text-sm text-gray-500">Current Grade: <span id="${subject.name}-grade" class="font-bold">${subject.grade}%</span></p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-4 py-2 rounded-full border-2 border-blue-600">Add Grade</button>
+            <button onclick="deleteSubject('${subject.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
     }
-  } else {
-    alert("Please enter a valid grade (0-100).");
-  }
-}
 
-function openNewSubjectModal() {
-  document.getElementById('new-subject-modal').style.display = 'flex';
-}
-
-function closeNewSubjectModal() {
-  document.getElementById('new-subject-modal').style.display = 'none';
-  document.getElementById('subject-name').value = '';
-  document.getElementById('subject-grade').value = '';
-}
-
-function addSubject() {
-  const name = document.getElementById('subject-name').value.trim();
-  const grade = parseFloat(document.getElementById('subject-grade').value);
-  if (name && !isNaN(grade) && grade >= 0 && grade <= 100) {
-    const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
-    if(subjects.some(s => s.name === name)) {
-      alert("Subject already exists.");
-      return;
+    function openGradeInput(subject) {
+      selectedSubject = subject;
+      document.getElementById('grade-input-modal').style.display = 'flex';
     }
-    subjects.push({ name, grade: grade.toFixed(2) });
-    localStorage.setItem('subjects', JSON.stringify(subjects));
-    loadSubjects();
-    closeNewSubjectModal();
-  } else {
-    alert("Please enter a valid subject and grade.");
-  }
-}
 
-function deleteSubject(name) {
-  if (confirm(`Are you sure you want to delete "${name}"?`)) {
-    let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
-    subjects = subjects.filter(subject => subject.name !== name);
-    localStorage.setItem('subjects', JSON.stringify(subjects));
-    loadSubjects();
-  }
-}
+    function closeGradeInput() {
+      document.getElementById('grade-input-modal').style.display = 'none';
+    }
 
-window.onload = loadSubjects;
-</script>
+    function submitGrade() {
+      const newGrade = parseFloat(document.getElementById('grade').value);
+      if (!isNaN(newGrade) && newGrade >= 0 && newGrade <= 100) {
+        const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        const subject = subjects.find(sub => sub.name === selectedSubject);
+        if (subject) {
+          subject.grade = newGrade.toFixed(2);
+          localStorage.setItem('subjects', JSON.stringify(subjects));
+          loadSubjects();
+          closeGradeInput();
+        }
+      } else {
+        alert("Please enter a valid grade (0-100).");
+      }
+    }
+
+    function openNewSubjectModal() {
+      document.getElementById('new-subject-modal').style.display = 'flex';
+    }
+
+    function closeNewSubjectModal() {
+      document.getElementById('new-subject-modal').style.display = 'none';
+    }
+
+    function addSubject() {
+      const name = document.getElementById('subject-name').value.trim();
+      const grade = parseFloat(document.getElementById('subject-grade').value);
+      if (name && !isNaN(grade) && grade >= 0 && grade <= 100) {
+        const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        subjects.push({ name, grade: grade.toFixed(2) });
+        localStorage.setItem('subjects', JSON.stringify(subjects));
+        loadSubjects();
+        closeNewSubjectModal();
+      } else {
+        alert("Please enter a valid subject and grade.");
+      }
+    }
+
+    function deleteSubject(name) {
+      if (confirm(`Are you sure you want to delete "${name}"?`)) {
+        let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        subjects = subjects.filter(subject => subject.name !== name);
+        localStorage.setItem('subjects', JSON.stringify(subjects));
+        loadSubjects();
+      }
+    }
+
+    window.onload = loadSubjects;
+  </script>
 
 </body>
 </html>
