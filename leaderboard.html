@@ -29,24 +29,24 @@
     <span class="text-sm font-semibold">Add New Player</span>
   </button>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Navigation Bar copied exactly from your grade tracker page -->
   <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
-    <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-yellow-500">
-      <i class="fas fa-clock text-2xl"></i>
-      <span class="text-sm">Upcoming</span>
-    </a>
-    <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-yellow-500">
-      <i class="fas fa-home text-2xl"></i>
-      <span class="text-sm">Home</span>
-    </a>
-    <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-yellow-500">
-      <i class="fas fa-chart-line text-2xl"></i>
-      <span class="text-sm">Grade Tracker</span>
-    </a>
-    <a href="leaderboard.html" class="flex flex-col items-center text-yellow-600">
-      <i class="fas fa-trophy text-2xl"></i>
-      <span class="text-sm font-bold">Leaderboard</span>
-    </a>
+      <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+          <i class="fas fa-clock text-2xl"></i>
+          <span class="text-sm">Upcoming</span>
+      </a>
+      <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+          <i class="fas fa-home text-2xl"></i>
+          <span class="text-sm">Home</span>
+      </a>
+      <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+          <i class="fas fa-chart-line text-2xl"></i>
+          <span class="text-sm">Grade Tracker</span>
+      </a>
+      <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+          <i class="fas fa-trophy text-2xl"></i>
+          <span class="text-sm">Leaderboard</span>
+      </a>
   </nav>
 
   <!-- Score Input Modal -->
@@ -77,103 +77,103 @@
     </div>
   </div>
 
-  <script>
-    let selectedPlayer = '';
+<script>
+  let selectedPlayer = '';
 
-    function loadPlayers() {
+  function loadPlayers() {
+    const players = JSON.parse(localStorage.getItem('players')) || [];
+    const list = document.getElementById('players-list');
+    list.innerHTML = '';
+
+    players.sort((a, b) => b.score - a.score);
+
+    players.forEach((player, index) => {
+      const div = document.createElement('div');
+      div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-yellow-50 transition-all";
+      div.innerHTML = `
+        <div class="flex items-center">
+          <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
+          <div>
+            <h2 class="text-xl font-semibold text-gray-800">${player.name}</h2>
+            <p class="text-sm text-gray-500">Score: <span id="${player.name}-score" class="font-bold">${player.score}</span></p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="openScoreInput('${player.name}')" class="text-yellow-600 hover:text-white hover:bg-yellow-600 transition-all px-4 py-2 rounded-full border-2 border-yellow-600">Update Score</button>
+          <button onclick="deletePlayer('${player.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function openScoreInput(player) {
+    selectedPlayer = player;
+    document.getElementById('score-input-modal').style.display = 'flex';
+  }
+
+  function closeScoreInput() {
+    document.getElementById('score-input-modal').style.display = 'none';
+    document.getElementById('score').value = '';
+  }
+
+  function submitScore() {
+    const newScore = parseInt(document.getElementById('score').value);
+    if (!isNaN(newScore) && newScore >= 0) {
       const players = JSON.parse(localStorage.getItem('players')) || [];
-      const list = document.getElementById('players-list');
-      list.innerHTML = '';
-
-      players.sort((a, b) => b.score - a.score);
-
-      players.forEach((player, index) => {
-        const div = document.createElement('div');
-        div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-yellow-50 transition-all";
-        div.innerHTML = `
-          <div class="flex items-center">
-            <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
-            <div>
-              <h2 class="text-xl font-semibold text-gray-800">${player.name}</h2>
-              <p class="text-sm text-gray-500">Score: <span id="${player.name}-score" class="font-bold">${player.score}</span></p>
-            </div>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="openScoreInput('${player.name}')" class="text-yellow-600 hover:text-white hover:bg-yellow-600 transition-all px-4 py-2 rounded-full border-2 border-yellow-600">Update Score</button>
-            <button onclick="deletePlayer('${player.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    function openScoreInput(player) {
-      selectedPlayer = player;
-      document.getElementById('score-input-modal').style.display = 'flex';
-    }
-
-    function closeScoreInput() {
-      document.getElementById('score-input-modal').style.display = 'none';
-      document.getElementById('score').value = '';
-    }
-
-    function submitScore() {
-      const newScore = parseInt(document.getElementById('score').value);
-      if (!isNaN(newScore) && newScore >= 0) {
-        const players = JSON.parse(localStorage.getItem('players')) || [];
-        const player = players.find(p => p.name === selectedPlayer);
-        if (player) {
-          player.score = newScore;
-          localStorage.setItem('players', JSON.stringify(players));
-          loadPlayers();
-          closeScoreInput();
-        }
-      } else {
-        alert("Please enter a valid score (0 or more).");
-      }
-    }
-
-    function openNewPlayerModal() {
-      document.getElementById('new-player-modal').style.display = 'flex';
-    }
-
-    function closeNewPlayerModal() {
-      document.getElementById('new-player-modal').style.display = 'none';
-      document.getElementById('player-name').value = '';
-      document.getElementById('player-score').value = '';
-    }
-
-    function addPlayer() {
-      const name = document.getElementById('player-name').value.trim();
-      const score = parseInt(document.getElementById('player-score').value);
-      if (name && !isNaN(score) && score >= 0) {
-        const players = JSON.parse(localStorage.getItem('players')) || [];
-        if(players.some(p => p.name === name)){
-          alert("Player name already exists.");
-          return;
-        }
-        players.push({ name, score });
+      const player = players.find(p => p.name === selectedPlayer);
+      if (player) {
+        player.score = newScore;
         localStorage.setItem('players', JSON.stringify(players));
         loadPlayers();
-        closeNewPlayerModal();
-      } else {
-        alert("Please enter a valid player name and score.");
+        closeScoreInput();
       }
+    } else {
+      alert("Please enter a valid score (0 or more).");
     }
+  }
 
-    function deletePlayer(name) {
-      if (confirm(`Are you sure you want to delete player "${name}"?`)) {
-        let players = JSON.parse(localStorage.getItem('players')) || [];
-        players = players.filter(p => p.name !== name);
-        localStorage.setItem('players', JSON.stringify(players));
-        loadPlayers();
+  function openNewPlayerModal() {
+    document.getElementById('new-player-modal').style.display = 'flex';
+  }
+
+  function closeNewPlayerModal() {
+    document.getElementById('new-player-modal').style.display = 'none';
+    document.getElementById('player-name').value = '';
+    document.getElementById('player-score').value = '';
+  }
+
+  function addPlayer() {
+    const name = document.getElementById('player-name').value.trim();
+    const score = parseInt(document.getElementById('player-score').value);
+    if (name && !isNaN(score) && score >= 0) {
+      const players = JSON.parse(localStorage.getItem('players')) || [];
+      if(players.some(p => p.name === name)){
+        alert("Player name already exists.");
+        return;
       }
+      players.push({ name, score });
+      localStorage.setItem('players', JSON.stringify(players));
+      loadPlayers();
+      closeNewPlayerModal();
+    } else {
+      alert("Please enter a valid player name and score.");
     }
+  }
 
-    window.onload = loadPlayers;
-  </script>
+  function deletePlayer(name) {
+    if (confirm(`Are you sure you want to delete player "${name}"?`)) {
+      let players = JSON.parse(localStorage.getItem('players')) || [];
+      players = players.filter(p => p.name !== name);
+      localStorage.setItem('players', JSON.stringify(players));
+      loadPlayers();
+    }
+  }
 
-  <!-- Font Awesome CDN for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  window.onload = loadPlayers;
+</script>
+
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
