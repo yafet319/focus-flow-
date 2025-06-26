@@ -6,25 +6,102 @@
   <title>Leaderboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-  <style>
-    body {
-      background-color: #F7FAFC;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-  </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="bg-gradient-to-b from-blue-100 to-white min-h-screen flex flex-col pt-10 px-4">
 
-  <main class="container mx-auto p-6 flex-grow">
-    <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-6">Leaderboard</h1>
-    <div id="leaderboard-list" class="space-y-4 max-w-xl mx-auto">
-      <!-- Leaderboard items will be inserted here -->
+  <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">🏆 Top Students</h1>
+
+  <div class="w-full max-w-md mx-auto space-y-4 mb-24">
+
+    <!-- Top 1 -->
+    <div class="flex items-center justify-between p-4 bg-yellow-100 rounded-2xl shadow hover:scale-105 transition">
+      <div class="flex items-center space-x-4">
+        <div class="text-2xl">🥇</div>
+        <div class="text-lg font-bold text-gray-800">Student 1</div>
+      </div>
+      <div class="text-gray-600 font-semibold">1000 pts</div>
     </div>
-  </main>
 
-  <!-- Bottom Navigation Bar (same as homepage) -->
+    <!-- Top 2 -->
+    <div class="flex items-center justify-between p-4 bg-gray-200 rounded-2xl shadow hover:scale-105 transition">
+      <div class="flex items-center space-x-4">
+        <div class="text-2xl">🥈</div>
+        <div class="text-lg font-bold text-gray-800">Student 2</div>
+      </div>
+      <div class="text-gray-600 font-semibold">950 pts</div>
+    </div>
+
+    <!-- Top 3 -->
+    <div class="flex items-center justify-between p-4 bg-orange-200 rounded-2xl shadow hover:scale-105 transition">
+      <div class="flex items-center space-x-4">
+        <div class="text-2xl">🥉</div>
+        <div class="text-lg font-bold text-gray-800">Student 3</div>
+      </div>
+      <div class="text-gray-600 font-semibold">900 pts</div>
+    </div>
+
+    <!-- 4th to 10th -->
+    <div class="space-y-3">
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">4</div>
+          <div class="text-lg text-gray-700">Student 4</div>
+        </div>
+        <div class="text-gray-500 font-semibold">870 pts</div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">5</div>
+          <div class="text-lg text-gray-700">Student 5</div>
+        </div>
+        <div class="text-gray-500 font-semibold">850 pts</div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">6</div>
+          <div class="text-lg text-gray-700">Student 6</div>
+        </div>
+        <div class="text-gray-500 font-semibold">820 pts</div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">7</div>
+          <div class="text-lg text-gray-700">Student 7</div>
+        </div>
+        <div class="text-gray-500 font-semibold">800 pts</div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">8</div>
+          <div class="text-lg text-gray-700">Student 8</div>
+        </div>
+        <div class="text-gray-500 font-semibold">780 pts</div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">9</div>
+          <div class="text-lg text-gray-700">Student 9</div>
+        </div>
+        <div class="text-gray-500 font-semibold">760 pts</div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 bg-white rounded-2xl shadow hover:scale-105 transition">
+        <div class="flex items-center space-x-4">
+          <div class="text-lg font-bold text-gray-500">10</div>
+          <div class="text-lg text-gray-700">Student 10</div>
+        </div>
+        <div class="text-gray-500 font-semibold">740 pts</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar (Same as Homepage) -->
   <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
     <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-clock text-2xl"></i>
@@ -43,32 +120,6 @@
       <span class="text-sm">Leaderboard</span>
     </a>
   </nav>
-
-  <script>
-    // Static leaderboard data — only display
-    const leaderboard = [
-      { name: 'Alice', score: 98 },
-      { name: 'Bob', score: 90 },
-      { name: 'Charlie', score: 85 },
-      { name: 'Diana', score: 80 }
-    ];
-
-    function loadLeaderboard() {
-      const container = document.getElementById('leaderboard-list');
-      container.innerHTML = '';
-      leaderboard.forEach((player, i) => {
-        const div = document.createElement('div');
-        div.className = 'bg-white p-4 rounded-lg shadow flex justify-between items-center';
-        div.innerHTML = `
-          <div class="font-semibold text-lg">${i + 1}. ${player.name}</div>
-          <div class="font-bold text-blue-600">${player.score} pts</div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    window.onload = loadLeaderboard;
-  </script>
 
 </body>
 </html>
