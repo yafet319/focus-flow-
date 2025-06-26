@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <style>
-        /* CSS for the motivational quote section */
         #quote-section {
             width: 100%;
             max-width: 400px;
@@ -17,47 +16,40 @@
             border-radius: 15px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
-
         #quote-section h3 {
             font-size: 1.25rem;
             font-weight: 600;
             color: #fff;
         }
-
         #quote-text {
             font-size: 1.125rem;
             color: #fff;
             font-style: italic;
         }
-
         nav {
             background-color: #ffffff;
             box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
         }
-
         nav a, nav button {
             color: #4A4A4A;
         }
-
         nav a:hover, nav button:hover {
             color: #4CAF50;
         }
-
         .navbar-icons i {
             transition: transform 0.3s ease;
         }
-
         .navbar-icons i:hover {
             transform: scale(1.1);
         }
-
         body {
             background-color: #F7FAFC;
         }
     </style>
 </head>
-<body class="flex flex-col h-screen bg-gray-100" onload="updateProgress()">
-    <!-- Progress Circle in Top Right Corner -->
+<body class="flex flex-col h-screen bg-gray-100">
+
+    <!-- Progress Circle -->
     <div class="absolute top-4 right-4 flex items-center">
         <svg width="50" height="50" viewBox="0 0 36 36" class="circular-chart">
             <path class="circle-bg" d="M18 2.0845a 15.9155 15.9155 0 1 1 0 31.831" fill="none" stroke="#eee" stroke-width="3" />
@@ -75,9 +67,16 @@
         <p id="quote-text" class="text-lg text-white italic">Loading quote...</p>
     </div>
 
-    <!-- Static Welcome Text -->
+    <!-- Welcome Text -->
     <div class="flex items-start justify-center mt-16">
         <h2 class="text-3xl font-bold text-gray-800">Welcome, Student!</h2>
+    </div>
+
+    <!-- Navigation Links (Cleaned) -->
+    <div class="flex justify-center mt-10 space-x-6 text-blue-600 underline">
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="grade-tracker.html">Grade Tracker</a>
+        <a href="upcoming.html">Upcoming</a>
     </div>
 
     <!-- Bottom Navigation Bar -->
@@ -94,14 +93,13 @@
             <i class="fas fa-chart-line text-2xl"></i>
             <span class="text-sm">Grade Tracker</span>
         </a>
-        <button onclick="window.location.href='leaderboard.html'" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+        <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
             <i class="fas fa-trophy text-2xl"></i>
             <span class="text-sm">Leaderboard</span>
-        </button>
+        </a>
     </nav>
 
     <script>
-        // List of motivational quotes
         const quotes = [
             "Believe you can and you're halfway there.",
             "The only way to do great work is to love what you do.",
@@ -124,13 +122,5 @@
         window.onload = showDailyQuote;
     </script>
 
-    <h1>home page</h1><br>
-
-    <!-- Navigation Links -->
-    <div class="flex justify-center mt-10 space-x-6 text-blue-600 underline">
-        <li><a href="leaderboard1.html">Leaderboard</a></li>
-            <li><a href="grade-tracker.html">Grade Tracker</a></li>
-            <li><a href="upcoming.html">Upcoming</a></li>
-    </div>
 </body>
 </html>
