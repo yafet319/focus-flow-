@@ -20,11 +20,11 @@
   <main class="container mx-auto p-6 flex-grow">
     <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-6">Leaderboard</h1>
     <div id="leaderboard-list" class="space-y-4 max-w-xl mx-auto">
-      <!-- Leaderboard items will go here -->
+      <!-- Leaderboard items will be inserted here -->
     </div>
   </main>
 
-  <!-- Bottom Navigation Bar (matching homepage style) -->
+  <!-- Bottom Navigation Bar (same as homepage) -->
   <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
     <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-clock text-2xl"></i>
@@ -45,7 +45,7 @@
   </nav>
 
   <script>
-    // Example static leaderboard data
+    // Static leaderboard data — only display
     const leaderboard = [
       { name: 'Alice', score: 98 },
       { name: 'Bob', score: 90 },
@@ -69,56 +69,6 @@
 
     window.onload = loadLeaderboard;
   </script>
-
-</body>
-</html>
-4. upcoming.html (Updated Bottom Nav, placeholder)
-html
-Copy
-Edit
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upcoming</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-  <style>
-    body {
-      background-color: #F7FAFC;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-  </style>
-</head>
-<body class="flex flex-col min-h-screen">
-
-  <main class="container mx-auto p-6 flex-grow text-center text-gray-700">
-    <h1 class="text-3xl font-extrabold mb-6 text-blue-600">Upcoming</h1>
-    <p>This page is under construction. Stay tuned!</p>
-  </main>
-
-  <!-- Bottom Navigation Bar (matching homepage style) -->
-  <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
-    <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-      <i class="fas fa-clock text-2xl"></i>
-      <span class="text-sm">Upcoming</span>
-    </a>
-    <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-      <i class="fas fa-home text-2xl"></i>
-      <span class="text-sm">Home</span>
-    </a>
-    <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-      <i class="fas fa-chart-line text-2xl"></i>
-      <span class="text-sm">Grade Tracker</span>
-    </a>
-    <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-      <i class="fas fa-trophy text-2xl"></i>
-      <span class="text-sm">Leaderboard</span>
-    </a>
-  </nav>
 
 </body>
 </html>
