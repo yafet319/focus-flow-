@@ -5,175 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Leaderboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <style>
-    #score-input-modal, #new-player-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 50;
+    body {
+      background-color: #F7FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="flex flex-col min-h-screen">
 
-  <div class="container mx-auto p-6 flex-grow">
-    <h1 class="text-3xl font-extrabold text-center text-yellow-600 mb-6">Leaderboard</h1>
+  <main class="container mx-auto p-6 flex-grow">
+    <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-6">Leaderboard</h1>
+    <div id="leaderboard-list" class="space-y-4 max-w-xl mx-auto">
+      <!-- Leaderboard items will go here -->
+    </div>
+  </main>
 
-    <div id="players-list" class="space-y-6"></div>
-  </div>
-
-  <!-- Floating Add New Player Button -->
-  <button onclick="openNewPlayerModal()" class="fixed bottom-20 right-6 bg-yellow-600 text-white rounded-full p-5 shadow-lg flex items-center gap-2 hover:bg-yellow-700 transition-all">
-    <span class="text-2xl">+</span>
-    <span class="text-sm font-semibold">Add New Player</span>
-  </button>
-
-  <!-- Bottom Navigation Bar copied exactly from your grade tracker page -->
+  <!-- Bottom Navigation Bar (matching homepage style) -->
   <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
-      <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-          <i class="fas fa-clock text-2xl"></i>
-          <span class="text-sm">Upcoming</span>
-      </a>
-      <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-          <i class="fas fa-home text-2xl"></i>
-          <span class="text-sm">Home</span>
-      </a>
-      <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-          <i class="fas fa-chart-line text-2xl"></i>
-          <span class="text-sm">Grade Tracker</span>
-      </a>
-      <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-          <i class="fas fa-trophy text-2xl"></i>
-          <span class="text-sm">Leaderboard</span>
-      </a>
+    <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-clock text-2xl"></i>
+      <span class="text-sm">Upcoming</span>
+    </a>
+    <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-home text-2xl"></i>
+      <span class="text-sm">Home</span>
+    </a>
+    <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-chart-line text-2xl"></i>
+      <span class="text-sm">Grade Tracker</span>
+    </a>
+    <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-trophy text-2xl"></i>
+      <span class="text-sm">Leaderboard</span>
+    </a>
   </nav>
 
-  <!-- Score Input Modal -->
-  <div id="score-input-modal" class="flex items-center justify-center">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-96">
-      <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Update Score</h2>
-      <label for="score" class="block mb-4 text-lg font-medium text-gray-600">Enter Score</label>
-      <input type="number" id="score" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="Enter score" min="0" />
-      <div class="flex justify-between gap-4">
-        <button onclick="submitScore()" class="bg-yellow-600 text-white px-6 py-2 rounded-full w-full transition-all hover:bg-yellow-700">Submit</button>
-        <button onclick="closeScoreInput()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
-      </div>
-    </div>
-  </div>
+  <script>
+    // Example static leaderboard data
+    const leaderboard = [
+      { name: 'Alice', score: 98 },
+      { name: 'Bob', score: 90 },
+      { name: 'Charlie', score: 85 },
+      { name: 'Diana', score: 80 }
+    ];
 
-  <!-- New Player Modal -->
-  <div id="new-player-modal" class="flex items-center justify-center">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-96">
-      <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Add New Player</h2>
-      <label for="player-name" class="block mb-4 text-lg font-medium text-gray-600">Player Name</label>
-      <input type="text" id="player-name" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. Yafet" />
-      <label for="player-score" class="block mb-4 text-lg font-medium text-gray-600">Score</label>
-      <input type="number" id="player-score" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. 1500" min="0" />
-      <div class="flex justify-between gap-4">
-        <button onclick="addPlayer()" class="bg-yellow-600 text-white px-6 py-2 rounded-full w-full transition-all hover:bg-yellow-700">Add</button>
-        <button onclick="closeNewPlayerModal()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-<script>
-  let selectedPlayer = '';
-
-  function loadPlayers() {
-    const players = JSON.parse(localStorage.getItem('players')) || [];
-    const list = document.getElementById('players-list');
-    list.innerHTML = '';
-
-    players.sort((a, b) => b.score - a.score);
-
-    players.forEach((player, index) => {
-      const div = document.createElement('div');
-      div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-yellow-50 transition-all";
-      div.innerHTML = `
-        <div class="flex items-center">
-          <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
-          <div>
-            <h2 class="text-xl font-semibold text-gray-800">${player.name}</h2>
-            <p class="text-sm text-gray-500">Score: <span id="${player.name}-score" class="font-bold">${player.score}</span></p>
-          </div>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="openScoreInput('${player.name}')" class="text-yellow-600 hover:text-white hover:bg-yellow-600 transition-all px-4 py-2 rounded-full border-2 border-yellow-600">Update Score</button>
-          <button onclick="deletePlayer('${player.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function openScoreInput(player) {
-    selectedPlayer = player;
-    document.getElementById('score-input-modal').style.display = 'flex';
-  }
-
-  function closeScoreInput() {
-    document.getElementById('score-input-modal').style.display = 'none';
-    document.getElementById('score').value = '';
-  }
-
-  function submitScore() {
-    const newScore = parseInt(document.getElementById('score').value);
-    if (!isNaN(newScore) && newScore >= 0) {
-      const players = JSON.parse(localStorage.getItem('players')) || [];
-      const player = players.find(p => p.name === selectedPlayer);
-      if (player) {
-        player.score = newScore;
-        localStorage.setItem('players', JSON.stringify(players));
-        loadPlayers();
-        closeScoreInput();
-      }
-    } else {
-      alert("Please enter a valid score (0 or more).");
+    function loadLeaderboard() {
+      const container = document.getElementById('leaderboard-list');
+      container.innerHTML = '';
+      leaderboard.forEach((player, i) => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-4 rounded-lg shadow flex justify-between items-center';
+        div.innerHTML = `
+          <div class="font-semibold text-lg">${i + 1}. ${player.name}</div>
+          <div class="font-bold text-blue-600">${player.score} pts</div>
+        `;
+        container.appendChild(div);
+      });
     }
-  }
 
-  function openNewPlayerModal() {
-    document.getElementById('new-player-modal').style.display = 'flex';
-  }
+    window.onload = loadLeaderboard;
+  </script>
 
-  function closeNewPlayerModal() {
-    document.getElementById('new-player-modal').style.display = 'none';
-    document.getElementById('player-name').value = '';
-    document.getElementById('player-score').value = '';
-  }
-
-  function addPlayer() {
-    const name = document.getElementById('player-name').value.trim();
-    const score = parseInt(document.getElementById('player-score').value);
-    if (name && !isNaN(score) && score >= 0) {
-      const players = JSON.parse(localStorage.getItem('players')) || [];
-      if(players.some(p => p.name === name)){
-        alert("Player name already exists.");
-        return;
-      }
-      players.push({ name, score });
-      localStorage.setItem('players', JSON.stringify(players));
-      loadPlayers();
-      closeNewPlayerModal();
-    } else {
-      alert("Please enter a valid player name and score.");
+</body>
+</html>
+4. upcoming.html (Updated Bottom Nav, placeholder)
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upcoming</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <style>
+    body {
+      background-color: #F7FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-  }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
 
-  function deletePlayer(name) {
-    if (confirm(`Are you sure you want to delete player "${name}"?`)) {
-      let players = JSON.parse(localStorage.getItem('players')) || [];
-      players = players.filter(p => p.name !== name);
-      localStorage.setItem('players', JSON.stringify(players));
-      loadPlayers();
-    }
-  }
+  <main class="container mx-auto p-6 flex-grow text-center text-gray-700">
+    <h1 class="text-3xl font-extrabold mb-6 text-blue-600">Upcoming</h1>
+    <p>This page is under construction. Stay tuned!</p>
+  </main>
 
-  window.onload = loadPlayers;
-</script>
+  <!-- Bottom Navigation Bar (matching homepage style) -->
+  <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
+    <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-clock text-2xl"></i>
+      <span class="text-sm">Upcoming</span>
+    </a>
+    <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-home text-2xl"></i>
+      <span class="text-sm">Home</span>
+    </a>
+    <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-chart-line text-2xl"></i>
+      <span class="text-sm">Grade Tracker</span>
+    </a>
+    <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-trophy text-2xl"></i>
+      <span class="text-sm">Leaderboard</span>
+    </a>
+  </nav>
 
-<!-- Font Awesome for icons -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
