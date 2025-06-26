@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOUR GRADES</title>
+    <title>Your Grades</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for modal overlay */
         #grade-input-modal, #new-subject-modal {
             display: none;
             position: fixed;
@@ -24,10 +23,7 @@
     <div class="container mx-auto p-6 flex-grow">
         <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-6">Your Grades</h1>
 
-        <!-- List of Subjects -->
-        <div id="subjects-list" class="space-y-6">
-            <!-- Subjects will be dynamically added here -->
-        </div>
+        <div id="subjects-list" class="space-y-6"></div>
     </div>
 
     <!-- Floating Add New Subject Button -->
@@ -36,18 +32,25 @@
         <span class="text-sm font-semibold">Add New Subject</span>
     </button>
 
-    <!-- Bottom Navigation -->
-    <div class="bg-white shadow-lg w-full py-3 flex justify-around items-center">
-        <div class="text-center">
-            <span class="material-icons">home</span>
-        </div>
-        <div class="text-center">
-            <span class="material-icons">leaderboard</span>
-        </div>
-        <div class="text-center">
-            <span class="material-icons">add</span>
-        </div>
-    </div>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
+        <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-clock text-2xl"></i>
+            <span class="text-sm">Upcoming</span>
+        </a>
+        <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-home text-2xl"></i>
+            <span class="text-sm">Home</span>
+        </a>
+        <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-chart-line text-2xl"></i>
+            <span class="text-sm">Grade Tracker</span>
+        </a>
+        <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+            <i class="fas fa-trophy text-2xl"></i>
+            <span class="text-sm">Leaderboard</span>
+        </a>
+    </nav>
 
     <!-- Grade Input Modal -->
     <div id="grade-input-modal" class="flex items-center justify-center">
@@ -55,7 +58,6 @@
             <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Input Grade</h2>
             <label for="grade" class="block mb-4 text-lg font-medium text-gray-600">Enter Grade (%)</label>
             <input type="number" id="grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="Enter grade" max="100" min="0">
-            
             <div class="flex justify-between gap-4">
                 <button onclick="submitGrade()" class="bg-blue-600 text-white px-6 py-2 rounded-full w-full transition-all hover:bg-blue-700">Submit</button>
                 <button onclick="closeGradeInput()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
@@ -69,10 +71,8 @@
             <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Add New Subject</h2>
             <label for="subject-name" class="block mb-4 text-lg font-medium text-gray-600">Subject Name</label>
             <input type="text" id="subject-name" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. History">
-            
             <label for="subject-grade" class="block mb-4 text-lg font-medium text-gray-600">Current Grade (%)</label>
             <input type="number" id="subject-grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. 92" max="100" min="0">
-
             <div class="flex justify-between gap-4">
                 <button onclick="addSubject()" class="bg-blue-600 text-white px-6 py-2 rounded-full w-full transition-all hover:bg-blue-700">Add</button>
                 <button onclick="closeNewSubjectModal()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
@@ -83,19 +83,18 @@
 <script>
 let selectedSubject = '';
 
-// Load subjects from localStorage and sort them by grade
+// Load subjects from localStorage and sort them
 function loadSubjects() {
     const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
     const list = document.getElementById('subjects-list');
     list.innerHTML = '';
 
-    // Sort subjects by grade (descending)
     subjects.sort((a, b) => b.grade - a.grade);
 
     subjects.forEach((subject, index) => {
         const div = document.createElement('div');
         div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-blue-50 transition-all";
-        div.innerHTML = 
+        div.innerHTML = `
             <div class="flex items-center">
                 <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
                 <div>
@@ -107,23 +106,20 @@ function loadSubjects() {
                 <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-4 py-2 rounded-full border-2 border-blue-600">Add Grade</button>
                 <button onclick="deleteSubject('${subject.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
             </div>
-        ;
+        `;
         list.appendChild(div);
     });
 }
 
-// Open the grade input modal
 function openGradeInput(subject) {
     selectedSubject = subject;
     document.getElementById('grade-input-modal').style.display = 'flex';
 }
 
-// Close the grade input modal
 function closeGradeInput() {
     document.getElementById('grade-input-modal').style.display = 'none';
 }
 
-// Submit the new grade
 function submitGrade() {
     const newGrade = parseFloat(document.getElementById('grade').value);
     if (!isNaN(newGrade) && newGrade >= 0 && newGrade <= 100) {
@@ -140,21 +136,17 @@ function submitGrade() {
     }
 }
 
-// Open the new subject modal
 function openNewSubjectModal() {
     document.getElementById('new-subject-modal').style.display = 'flex';
 }
 
-// Close the new subject modal
 function closeNewSubjectModal() {
     document.getElementById('new-subject-modal').style.display = 'none';
 }
 
-// Add new subject
 function addSubject() {
     const name = document.getElementById('subject-name').value.trim();
     const grade = parseFloat(document.getElementById('subject-grade').value);
-
     if (name && !isNaN(grade) && grade >= 0 && grade <= 100) {
         const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
         subjects.push({ name, grade: grade.toFixed(2) });
@@ -166,9 +158,8 @@ function addSubject() {
     }
 }
 
-// Delete a subject
 function deleteSubject(name) {
-    if (confirm(Are you sure you want to delete "${name}"?)) {
+    if (confirm(`Are you sure you want to delete "${name}"?`)) {
         let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
         subjects = subjects.filter(subject => subject.name !== name);
         localStorage.setItem('subjects', JSON.stringify(subjects));
@@ -176,16 +167,8 @@ function deleteSubject(name) {
     }
 }
 
-// Load subjects on page load
 window.onload = loadSubjects;
 </script>
-
-<!-- Page Footer Navigation -->
-<div class="mt-10 space-x-6 text-blue-600 underline">
-        <a href="index.html">Home</a>
-        <a href="leaderboard.html">Leaderboard</a>
-        <a href="upcoming.html">Upcoming</a>
-    </div>
 
 </body>
 </html>
