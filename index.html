@@ -1,121 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <style>
-        #quote-section {
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-            background-color: #4CAF50;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        #quote-section h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        #quote-text {
-            font-size: 1.125rem;
-            color: #fff;
-            font-style: italic;
-        }
-        nav {
-            background-color: #ffffff;
-            box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
-        }
-        nav a, nav button {
-            color: #4A4A4A;
-        }
-        nav a:hover, nav button:hover {
-            color: #4CAF50;
-        }
-        .navbar-icons i {
-            transition: transform 0.3s ease;
-        }
-        .navbar-icons i:hover {
-            transform: scale(1.1);
-        }
-        body {
-            background-color: #F7FAFC;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Soft Blue-Themed Home & To-Do Sidebar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <style>
+    /* --- Global Styles --- */
+    body {
+      background-color: #F7FAFC; /* light neutral */
+      margin: 0;
+      padding-right: 360px; /* sidebar space */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #334E68; /* soft dark slate blue */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* --- Quote Box --- */
+    #quote-section {
+      max-width: 400px;
+      margin: 2rem auto;
+      background-color: #A8C0FF; /* soft pastel blue */
+      padding: 24px 28px;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(168, 192, 255, 0.4);
+      color: #1E293B; /* dark slate */
+      text-align: center;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    #quote-section h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #334E68;
+    }
+    #quote-text {
+      font-size: 1.15rem;
+      font-style: italic;
+      line-height: 1.4;
+      color: #475569;
+    }
+
+    /* Welcome Text */
+    .welcome-text {
+      margin-top: 4rem;
+      text-align: center;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #334E68; /* slate blue */
+      letter-spacing: 0.03em;
+    }
+
+    /* --- Navigation Bar --- */
+    nav {
+      background-color: white;
+      box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.08);
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 1rem 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+      user-select: none;
+    }
+    nav a {
+      color: #334E68; /* slate blue */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.875rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.25s ease;
+    }
+    nav a:hover {
+      color: #6B82A8; /* lighter soft blue */
+    }
+    nav i {
+      font-size: 1.6rem;
+      margin-bottom: 0.3rem;
+      transition: transform 0.3s ease;
+    }
+    nav a:hover i {
+      transform: scale(1.15);
+    }
+
+    /* --- To-Do List Sidebar Styles --- */
+    .todo-box {
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      background: #D6E4FF; /* very soft baby blue */
+      padding: 28px 24px;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(214, 228, 255, 0.7);
+      width: 340px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      color: #334E68; /* slate blue text */
+      user-select: none;
+    }
+    .todo-box h2 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #334E68;
+      letter-spacing: 0.02em;
+      border-bottom: 2px solid #B0C4FF; /* subtle soft underline */
+      padding-bottom: 6px;
+    }
+    ul#todo-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+      overflow-y: auto;
+      color: #334E68;
+      scroll-behavior: smooth;
+    }
+    ul#todo-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      background: #B0C4FF; /* soft blue */
+      padding: 10px 14px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(176, 196, 255, 0.6);
+      transition: background-color 0.3s ease;
+    }
+    ul#todo-list li:hover {
+      background: #C9D9FF; /* highlight lighter blue */
+    }
+    .left {
+      display: flex;
+      align-items: center;
+      color: #1E293B; /* dark slate */
+      user-select: text;
+    }
+    input[type="checkbox"] {
+      margin-right: 12px;
+      transform: scale(1.25);
+      cursor: pointer;
+      accent-color: #94A3B8; /* subtle slate blue */
+      transition: accent-color 0.3s ease;
+    }
+    input[type="checkbox"]:hover {
+      accent-color: #64748B;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: #F87171; /* soft red */
+      cursor: pointer;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    .delete-btn:hover {
+      color: #B91C1C; /* deeper red */
+    }
+    #add-task-btn {
+      margin-top: 20px;
+      background-color: #A8C0FF; /* soft pastel blue */
+      color: #1E293B;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.05rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(168, 192, 255, 0.6);
+      user-select: none;
+    }
+    #add-task-btn:hover {
+      background-color: #8FA9FF;
+      box-shadow: 0 6px 18px rgba(143, 169, 255, 0.8);
+    }
+    #progress {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #64748B;
+      flex-shrink: 0;
+      user-select: none;
+      letter-spacing: 0.02em;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: #FBBF24; /* bright yellow */
+      border-radius: 4px;
+      animation: pop 1.5s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    @keyframes pop {
+      100% {
+        transform: translate(var(--x), var(--y)) rotate(1080deg);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
-<body class="flex flex-col h-screen bg-gray-100">
+<body>
 
-    <!-- Progress Circle -->
-    <div class="absolute top-4 right-4 flex items-center">
-        <svg width="50" height="50" viewBox="0 0 36 36" class="circular-chart">
-            <path class="circle-bg" d="M18 2.0845a 15.9155 15.9155 0 1 1 0 31.831" fill="none" stroke="#eee" stroke-width="3" />
-            <path id="progress-circle" class="circle" d="M18 2.0845a 15.9155 15.9155 0 1 1 0 31.831" fill="none" stroke="#4CAF50" stroke-width="3" stroke-dasharray="0, 100" />
-        </svg>
-        <div class="ml-2 text-sm font-bold text-gray-700">
-            <div id="progress-text">0%</div>
-            <div class="text-xs text-gray-500">Daily Progress</div>
-        </div>
-    </div>
+  <!-- Motivational Quote Section -->
+  <div id="quote-section" role="region" aria-label="Daily motivational quote">
+    <h3>Your Daily Motivation</h3>
+    <p id="quote-text">Loading quote...</p>
+  </div>
 
-    <!-- Motivational Quote Section -->
-    <div id="quote-section" class="bg-green-500 p-6 rounded-lg shadow-md text-center">
-        <h3 class="text-xl font-bold text-white mb-4">Your Daily Motivation</h3>
-        <p id="quote-text" class="text-lg text-white italic">Loading quote...</p>
-    </div>
+  <!-- Welcome Text -->
+  <div class="welcome-text" role="heading" aria-level="1">Welcome, Student!</div>
 
-    <!-- Welcome Text -->
-    <div class="flex items-start justify-center mt-16">
-        <h2 class="text-3xl font-bold text-gray-800">Welcome, Student!</h2>
-    </div>
+  <!-- Bottom Navigation Bar -->
+  <nav role="navigation" aria-label="Primary navigation">
+    <a href="upcoming.html" aria-label="Upcoming tasks">
+      <i class="fas fa-clock" aria-hidden="true"></i>
+      <span>Upcoming</span>
+    </a>
+    <a href="index.html" aria-label="Home page">
+      <i class="fas fa-home" aria-hidden="true"></i>
+      <span>Home</span>
+    </a>
+    <a href="grade-tracker.html" aria-label="Grade tracker">
+      <i class="fas fa-chart-line" aria-hidden="true"></i>
+      <span>Grade Tracker</span>
+    </a>
+    <a href="leaderboard.html" aria-label="Leaderboard">
+      <i class="fas fa-trophy" aria-hidden="true"></i>
+      <span>Leaderboard</span>
+    </a>
+  </nav>
 
-    <!-- Removed the old plain text links here -->
+  <!-- To-Do List Sidebar -->
+  <section class="todo-box" aria-label="Daily To-Do List">
+    <h2>📅 Today's To-Do List</h2>
+    <ul id="todo-list"></ul>
+    <button id="add-task-btn" onclick="addTask()" aria-label="Add new task">+ Add Task</button>
+    <p id="progress" aria-live="polite">✅ 0/0 tasks complete</p>
+  </section>
 
-    <!-- Bottom Navigation Bar -->
-    <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
-        <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-            <i class="fas fa-clock text-2xl"></i>
-            <span class="text-sm">Upcoming</span>
-        </a>
-        <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-            <i class="fas fa-home text-2xl"></i>
-            <span class="text-sm">Home</span>
-        </a>
-        <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-            <i class="fas fa-chart-line text-2xl"></i>
-            <span class="text-sm">Grade Tracker</span>
-        </a>
-        <a href="leaderboard.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
-            <i class="fas fa-trophy text-2xl"></i>
-            <span class="text-sm">Leaderboard</span>
-        </a>
-    </nav>
+  <script>
+    // Quotes array
+    const quotes = [
+      "Believe you can and you're halfway there.",
+      "The only way to do great work is to love what you do.",
+      "Success is not the key to happiness. Happiness is the key to success.",
+      "Don’t watch the clock; do what it does. Keep going.",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      "The future belongs to those who believe in the beauty of their dreams.",
+      "Your time is limited, so don’t waste it living someone else’s life.",
+      "The only limit to our realization of tomorrow is our doubts of today.",
+      "Hardships often prepare ordinary people for an extraordinary destiny."
+    ];
+    function showDailyQuote() {
+      const today = new Date();
+      const quoteIndex = today.getDate() % quotes.length;
+      document.getElementById('quote-text').innerText = quotes[quoteIndex];
+    }
+    window.onload = showDailyQuote;
 
-    <script>
-        const quotes = [
-            "Believe you can and you're halfway there.",
-            "The only way to do great work is to love what you do.",
-            "Success is not the key to happiness. Happiness is the key to success.",
-            "Don’t watch the clock; do what it does. Keep going.",
-            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-            "The future belongs to those who believe in the beauty of their dreams.",
-            "Your time is limited, so don’t waste it living someone else’s life.",
-            "The only limit to our realization of tomorrow is our doubts of today.",
-            "Hardships often prepare ordinary people for an extraordinary destiny."
-        ];
+    // To-Do List Functions
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
+      let completed = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) completed++;
+      });
+      const total = checkboxes.length;
+      document.getElementById('progress').innerText = `✅ ${completed}/${total} tasks complete`;
+    }
 
-        function showDailyQuote() {
-            const today = new Date();
-            const quoteIndex = today.getDate() % quotes.length;
-            const dailyQuote = quotes[quoteIndex];
-            document.getElementById('quote-text').innerText = dailyQuote;
-        }
+    function checkTask(checkbox) {
+      if (checkbox.checked) {
+        dropConfettiFromCenter();
+      }
+      updateProgress();
+    }
 
-        window.onload = showDailyQuote;
-    </script>
+    function addTask() {
+      const task = prompt("Enter your new task:");
+      if (task && task.trim() !== "") {
+        const li = document.createElement("li");
 
+        const leftDiv = document.createElement("div");
+        leftDiv.className = "left";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.onchange = function () { checkTask(checkbox); };
+
+        leftDiv.appendChild(checkbox);
+        leftDiv.appendChild(document.createTextNode(task.trim()));
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.innerHTML = "🗑️";
+        deleteBtn.onclick = function () {
+          li.remove();
+          updateProgress();
+        };
+
+        li.appendChild(leftDiv);
+        li.appendChild(deleteBtn);
+
+        document.getElementById("todo-list").appendChild(li);
+        updateProgress();
+      }
+    }
+
+    function dropConfettiFromCenter() {
+      const centerX = window.innerWidth - 190; // approx center of sidebar horizontally
+      const centerY = 150; // near top inside sidebar vertically
+
+      for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 200 + 50;
+
+        const x = Math.cos(angle) * distance + 'px';
+        const y = Math.sin(angle) * distance + 'px';
+
+        confetti.style.left = `${centerX}px`;
+        confetti.style.top = `${centerY}px`;
+        confetti.style.setProperty('--x', x);
+        confetti.style.setProperty('--y', y);
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.remove();
+        }, 1500);
+      }
+    }
+
+  </script>
 </body>
 </html>
