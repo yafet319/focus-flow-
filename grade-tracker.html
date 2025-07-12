@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <style>
-    #grade-input-modal, #new-subject-modal {
+    #grade-input-modal, #new-subject-modal, #set-goal-modal {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -23,14 +23,24 @@
     <div id="subjects-list" class="space-y-6"></div>
   </div>
 
+  <!-- Floating Set Goal Button - way higher -->
+  <button onclick="openSetGoalModal()" 
+    style="position: fixed; bottom: 100px; right: 24px; background-color: #f6e05e; color: #1a202c; border-radius: 9999px; padding: 1.25rem; box-shadow: 0 10px 15px -3px rgba(202, 138, 4, 0.5); display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; z-index: 9999;"
+    onmouseover="this.style.backgroundColor='#d69e2e'" onmouseout="this.style.backgroundColor='#f6e05e'">
+    <i class="fas fa-bullseye" style="font-size: 1.25rem;"></i>
+    <span>Set Goal</span>
+  </button>
+
   <!-- Floating Add New Subject Button -->
-  <button onclick="openNewSubjectModal()" class="fixed bottom-20 right-6 bg-blue-600 text-white rounded-full p-5 shadow-lg flex items-center gap-2 hover:bg-blue-700 transition-all">
-    <span class="text-2xl">+</span>
-    <span class="text-sm font-semibold">Add New Subject</span>
+  <button onclick="openNewSubjectModal()" 
+    style="position: fixed; bottom: 40px; right: 24px; background-color: #3182ce; color: white; border-radius: 9999px; padding: 1.25rem; box-shadow: 0 10px 15px -3px rgba(49, 130, 206, 0.5); display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; z-index: 9999;"
+    onmouseover="this.style.backgroundColor='#2c5282'" onmouseout="this.style.backgroundColor='#3182ce'">
+    <span style="font-size: 1.5rem; line-height: 1;">+</span>
+    <span>Add New Subject</span>
   </button>
 
   <!-- Bottom Navigation Bar (matching homepage style) -->
-  <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full">
+  <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full z-40">
     <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-clock text-2xl"></i>
       <span class="text-sm">Upcoming</span>
@@ -77,8 +87,30 @@
     </div>
   </div>
 
+  <!-- Set Goal Modal -->
+  <div id="set-goal-modal" class="flex items-center justify-center">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-96">
+      <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Set Your Grade Goal (%)</h2>
+      <label for="goal-grade" class="block mb-4 text-lg font-medium text-gray-600">Goal Percentage</label>
+      <input type="number" id="goal-grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. 85" max="100" min="0" />
+      <div class="flex justify-between gap-4">
+        <button onclick="submitGoal()" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-full w-full transition-all hover:bg-yellow-500">Set Goal</button>
+        <button onclick="closeSetGoalModal()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let selectedSubject = '';
+    // Force clear any cached subjects & goal on first load to avoid confusion
+    if (!localStorage.getItem('subjects')) {
+      localStorage.setItem('subjects', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('gradeGoal')) {
+      localStorage.removeItem('gradeGoal');
+    }
+
+    let gradeGoal = localStorage.getItem('gradeGoal') ? parseFloat(localStorage.getItem('gradeGoal')) : null;
 
     function loadSubjects() {
       const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
@@ -88,8 +120,19 @@
       subjects.sort((a, b) => b.grade - a.grade);
 
       subjects.forEach((subject, index) => {
+        // Determine background color based on goal
+        let bgClass = "bg-white";
+        if (gradeGoal !== null) {
+          const diff = gradeGoal - subject.grade;
+          if (diff > 15) {
+            bgClass = "bg-red-100"; // red tint for >15% below goal
+          } else if (diff > 5) {
+            bgClass = "bg-yellow-100"; // yellow tint for 5-15% below goal
+          }
+        }
+
         const div = document.createElement('div');
-        div.className = "bg-white p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-blue-50 transition-all";
+        div.className = `${bgClass} p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-blue-50 transition-all`;
         div.innerHTML = `
           <div class="flex items-center">
             <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
@@ -110,6 +153,7 @@
     function openGradeInput(subject) {
       selectedSubject = subject;
       document.getElementById('grade-input-modal').style.display = 'flex';
+      document.getElementById('grade').value = '';
     }
 
     function closeGradeInput() {
@@ -134,6 +178,8 @@
 
     function openNewSubjectModal() {
       document.getElementById('new-subject-modal').style.display = 'flex';
+      document.getElementById('subject-name').value = '';
+      document.getElementById('subject-grade').value = '';
     }
 
     function closeNewSubjectModal() {
@@ -145,6 +191,11 @@
       const grade = parseFloat(document.getElementById('subject-grade').value);
       if (name && !isNaN(grade) && grade >= 0 && grade <= 100) {
         const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        // Avoid duplicates
+        if (subjects.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+          alert("Subject already exists.");
+          return;
+        }
         subjects.push({ name, grade: grade.toFixed(2) });
         localStorage.setItem('subjects', JSON.stringify(subjects));
         loadSubjects();
@@ -163,7 +214,36 @@
       }
     }
 
-    window.onload = loadSubjects;
+    // Set Goal Modal functions
+    function openSetGoalModal() {
+      document.getElementById('set-goal-modal').style.display = 'flex';
+      document.getElementById('goal-grade').value = gradeGoal !== null ? gradeGoal : '';
+    }
+
+    function closeSetGoalModal() {
+      document.getElementById('set-goal-modal').style.display = 'none';
+    }
+
+    function submitGoal() {
+      const newGoal = parseFloat(document.getElementById('goal-grade').value);
+      if (!isNaN(newGoal) && newGoal >= 0 && newGoal <= 100) {
+        gradeGoal = newGoal.toFixed(2);
+        localStorage.setItem('gradeGoal', gradeGoal);
+        loadSubjects();
+        closeSetGoalModal();
+      } else {
+        alert("Please enter a valid goal grade (0-100).");
+      }
+    }
+
+    window.onload = () => {
+      // Clear cached subjects and goal on first load to ensure empty list if user wants fresh start
+      if (!localStorage.getItem('subjects')) {
+        localStorage.setItem('subjects', JSON.stringify([]));
+      }
+      gradeGoal = localStorage.getItem('gradeGoal') ? parseFloat(localStorage.getItem('gradeGoal')) : null;
+      loadSubjects();
+    };
   </script>
 
 </body>
