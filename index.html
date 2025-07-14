@@ -3,262 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Soft Blue-Themed Home & To-Do Sidebar</title>
+  <title>Student Home</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <style>
-    /* --- Global Styles --- */
     body {
-      background-color: #F7FAFC; /* light neutral */
-      margin: 0;
-      padding-right: 360px; /* sidebar space */
+      background-color: #F7FAFC;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #334E68; /* soft dark slate blue */
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* --- Quote Box --- */
-    #quote-section {
-      max-width: 400px;
-      margin: 2rem auto;
-      background-color: #A8C0FF; /* soft pastel blue */
-      padding: 24px 28px;
-      border-radius: 16px;
-      box-shadow: 0 8px 16px rgba(168, 192, 255, 0.4);
-      color: #1E293B; /* dark slate */
-      text-align: center;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #quote-section h3 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
       color: #334E68;
-    }
-    #quote-text {
-      font-size: 1.15rem;
-      font-style: italic;
-      line-height: 1.4;
-      color: #475569;
-    }
-
-    /* Welcome Text */
-    .welcome-text {
-      margin-top: 4rem;
-      text-align: center;
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #334E68; /* slate blue */
-      letter-spacing: 0.03em;
-    }
-
-    /* --- Navigation Bar --- */
-    nav {
-      background-color: white;
-      box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.08);
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      padding: 1rem 0;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 999;
-      user-select: none;
-    }
-    nav a {
-      color: #334E68; /* slate blue */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.875rem;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.25s ease;
-    }
-    nav a:hover {
-      color: #6B82A8; /* lighter soft blue */
-    }
-    nav i {
-      font-size: 1.6rem;
-      margin-bottom: 0.3rem;
-      transition: transform 0.3s ease;
-    }
-    nav a:hover i {
-      transform: scale(1.15);
-    }
-
-    /* --- To-Do List Sidebar Styles --- */
-    .todo-box {
-      position: fixed;
-      top: 50px;
-      right: 20px;
-      background: #D6E4FF; /* very soft baby blue */
-      padding: 28px 24px;
-      border-radius: 20px;
-      box-shadow: 0 12px 28px rgba(214, 228, 255, 0.7);
-      width: 340px;
-      max-height: 80vh;
-      overflow-y: auto;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      color: #334E68; /* slate blue text */
-      user-select: none;
-    }
-    .todo-box h2 {
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #334E68;
-      letter-spacing: 0.02em;
-      border-bottom: 2px solid #B0C4FF; /* subtle soft underline */
-      padding-bottom: 6px;
-    }
-    ul#todo-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      flex-grow: 1;
-      overflow-y: auto;
-      color: #334E68;
-      scroll-behavior: smooth;
-    }
-    ul#todo-list li {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-      font-size: 1rem;
-      background: #B0C4FF; /* soft blue */
-      padding: 10px 14px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(176, 196, 255, 0.6);
-      transition: background-color 0.3s ease;
-    }
-    ul#todo-list li:hover {
-      background: #C9D9FF; /* highlight lighter blue */
-    }
-    .left {
-      display: flex;
-      align-items: center;
-      color: #1E293B; /* dark slate */
-      user-select: text;
-    }
-    input[type="checkbox"] {
-      margin-right: 12px;
-      transform: scale(1.25);
-      cursor: pointer;
-      accent-color: #94A3B8; /* subtle slate blue */
-      transition: accent-color 0.3s ease;
-    }
-    input[type="checkbox"]:hover {
-      accent-color: #64748B;
-    }
-    .delete-btn {
-      background: none;
-      border: none;
-      font-size: 1.25rem;
-      color: #F87171; /* soft red */
-      cursor: pointer;
-      transition: color 0.3s ease;
-      user-select: none;
-    }
-    .delete-btn:hover {
-      color: #B91C1C; /* deeper red */
-    }
-    #add-task-btn {
-      margin-top: 20px;
-      background-color: #A8C0FF; /* soft pastel blue */
-      color: #1E293B;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1.05rem;
-      font-weight: 600;
-      flex-shrink: 0;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 10px rgba(168, 192, 255, 0.6);
-      user-select: none;
-    }
-    #add-task-btn:hover {
-      background-color: #8FA9FF;
-      box-shadow: 0 6px 18px rgba(143, 169, 255, 0.8);
-    }
-    #progress {
-      margin-top: 15px;
-      font-weight: 600;
-      color: #64748B;
-      flex-shrink: 0;
-      user-select: none;
-      letter-spacing: 0.02em;
-    }
-
-    /* Confetti */
-    .confetti {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      background-color: #FBBF24; /* bright yellow */
-      border-radius: 4px;
-      animation: pop 1.5s ease-out forwards;
-      pointer-events: none;
-      z-index: 9999;
-    }
-    @keyframes pop {
-      100% {
-        transform: translate(var(--x), var(--y)) rotate(1080deg);
-        opacity: 0;
-      }
     }
   </style>
 </head>
-<body>
+<body class="pb-24">
 
-  <!-- Motivational Quote Section -->
-  <div id="quote-section" role="region" aria-label="Daily motivational quote">
-    <h3>Your Daily Motivation</h3>
-    <p id="quote-text">Loading quote...</p>
+  <!-- Quote Section -->
+  <div class="max-w-screen-sm mx-auto mt-8 px-4">
+    <div class="bg-blue-200 p-6 rounded-xl shadow-md text-center">
+      <h3 class="text-xl font-semibold mb-3">Your Daily Motivation</h3>
+      <p id="quote-text" class="italic text-gray-700">Loading quote...</p>
+    </div>
   </div>
 
   <!-- Welcome Text -->
-  <div class="welcome-text" role="heading" aria-level="1">Welcome, Student!</div>
+  <h1 class="text-center text-3xl font-bold mt-10 mb-4 px-4">Welcome, Student!</h1>
 
-  <!-- Bottom Navigation Bar -->
-  <nav role="navigation" aria-label="Primary navigation">
-    <a href="upcoming.html" aria-label="Upcoming tasks">
-      <i class="fas fa-clock" aria-hidden="true"></i>
-      <span>Upcoming</span>
+  <!-- To-Do Section -->
+  <div class="max-w-screen-sm mx-auto px-4">
+    <div class="bg-blue-100 p-5 rounded-lg shadow-lg">
+      <h2 class="text-xl font-semibold mb-4">📅 Today's To-Do List</h2>
+      <ul id="todo-list" class="space-y-3"></ul>
+      <button onclick="addTask()" class="mt-4 bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg w-full font-semibold">+ Add Task</button>
+      <p id="progress" class="text-sm text-gray-600 mt-2">✅ 0/0 tasks complete</p>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-inner flex justify-around py-3 z-50">
+    <a href="upcoming.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
+      <i class="fas fa-clock text-xl mb-1"></i>
+      Upcoming
     </a>
-    <a href="index.html" aria-label="Home page">
-      <i class="fas fa-home" aria-hidden="true"></i>
-      <span>Home</span>
+    <a href="index.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
+      <i class="fas fa-home text-xl mb-1"></i>
+      Home
     </a>
-    <a href="grade-tracker.html" aria-label="Grade tracker">
-      <i class="fas fa-chart-line" aria-hidden="true"></i>
-      <span>Grade Tracker</span>
+    <a href="grade-tracker.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
+      <i class="fas fa-chart-line text-xl mb-1"></i>
+      Grade Tracker
     </a>
-    <a href="calander.html" aria-label="calander">
-      <i class="fas fa-trophy" aria-hidden="true"></i>
-      <span>calander</span>
+    <a href="calendar.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
+      <i class="fas fa-calendar-alt text-xl mb-1"></i>
+      Calendar
     </a>
   </nav>
 
-  <!-- To-Do List Sidebar -->
-  <section class="todo-box" aria-label="Daily To-Do List">
-    <h2>📅 Today's To-Do List</h2>
-    <ul id="todo-list"></ul>
-    <button id="add-task-btn" onclick="addTask()" aria-label="Add new task">+ Add Task</button>
-    <p id="progress" aria-live="polite"> 0/0 tasks complete</p>
-  </section>
+  <!-- Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 
+  <!-- Script -->
   <script>
-    // Quotes array
     const quotes = [
       "Believe you can and you're halfway there.",
       "The only way to do great work is to love what you do.",
@@ -277,7 +79,7 @@
     }
     window.onload = showDailyQuote;
 
-    // To-Do List Functions
+    // To-do List
     function updateProgress() {
       const checkboxes = document.querySelectorAll('#todo-list input[type="checkbox"]');
       let completed = 0;
@@ -289,9 +91,6 @@
     }
 
     function checkTask(checkbox) {
-      if (checkbox.checked) {
-        dropConfettiFromCenter();
-      }
       updateProgress();
     }
 
@@ -299,61 +98,35 @@
       const task = prompt("Enter your new task:");
       if (task && task.trim() !== "") {
         const li = document.createElement("li");
+        li.className = "bg-blue-300 flex justify-between items-center px-3 py-2 rounded-lg shadow";
 
-        const leftDiv = document.createElement("div");
-        leftDiv.className = "left";
+        const left = document.createElement("div");
+        left.className = "flex items-center gap-3";
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.onchange = function () { checkTask(checkbox); };
 
-        leftDiv.appendChild(checkbox);
-        leftDiv.appendChild(document.createTextNode(task.trim()));
+        const text = document.createElement("span");
+        text.innerText = task.trim();
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.className = "delete-btn";
-        deleteBtn.innerHTML = "🗑️";
-        deleteBtn.onclick = function () {
+        left.appendChild(checkbox);
+        left.appendChild(text);
+
+        const delBtn = document.createElement("button");
+        delBtn.innerHTML = "🗑️";
+        delBtn.onclick = function () {
           li.remove();
           updateProgress();
         };
 
-        li.appendChild(leftDiv);
-        li.appendChild(deleteBtn);
+        li.appendChild(left);
+        li.appendChild(delBtn);
 
         document.getElementById("todo-list").appendChild(li);
         updateProgress();
       }
     }
-
-    function dropConfettiFromCenter() {
-      const centerX = window.innerWidth - 190; // approx center of sidebar horizontally
-      const centerY = 150; // near top inside sidebar vertically
-
-      for (let i = 0; i < 80; i++) {
-        const confetti = document.createElement("div");
-        confetti.classList.add("confetti");
-
-        const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * 200 + 50;
-
-        const x = Math.cos(angle) * distance + 'px';
-        const y = Math.sin(angle) * distance + 'px';
-
-        confetti.style.left = `${centerX}px`;
-        confetti.style.top = `${centerY}px`;
-        confetti.style.setProperty('--x', x);
-        confetti.style.setProperty('--y', y);
-        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
-
-        document.body.appendChild(confetti);
-
-        setTimeout(() => {
-          confetti.remove();
-        }, 1500);
-      }
-    }
-
   </script>
 </body>
 </html>
