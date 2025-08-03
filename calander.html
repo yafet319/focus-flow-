@@ -47,21 +47,18 @@
       font-size: 1.6rem;
       margin-bottom: 0.3rem;
     }
-
     #calendar-container {
       width: 100%;
       max-width: 1200px;
       margin: auto;
       padding: 1rem;
     }
-
     #calendar {
       background: #fff;
       padding: 1rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-
     .action-buttons {
       display: flex;
       justify-content: center;
@@ -69,7 +66,6 @@
       margin-top: 1rem;
       margin-bottom: 2rem;
     }
-
     .action-buttons button {
       background-color: #A8C0FF;
       color: #1E293B;
@@ -81,11 +77,9 @@
       cursor: pointer;
       transition: 0.3s ease;
     }
-
     .action-buttons button:hover {
       background-color: #91B4FF;
     }
-
     .popup, .edit-popup {
       position: fixed;
       top: 50%;
@@ -102,21 +96,18 @@
       width: 90%;
       max-width: 400px;
     }
-
     .popup input {
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #CBD5E1;
       font-size: 1rem;
     }
-
     .popup .buttons,
     .edit-popup .buttons {
       display: flex;
       justify-content: flex-end;
       gap: 10px;
     }
-
     .overlay {
       position: fixed;
       top: 0; left: 0;
@@ -125,7 +116,6 @@
       z-index: 9999;
       display: none;
     }
-
     .event-item {
       display: flex;
       justify-content: space-between;
@@ -135,11 +125,9 @@
       border-radius: 8px;
       margin-bottom: 8px;
     }
-
     .event-item span {
       font-weight: 500;
     }
-
     .delete-event-btn {
       background: none;
       border: none;
@@ -193,6 +181,21 @@
   <script>
     let calendar;
 
+    function saveEventsToStorage() {
+      const events = calendar.getEvents().map(event => ({
+        title: event.title,
+        date: event.startStr
+      }));
+      localStorage.setItem("calendarEvents", JSON.stringify(events));
+    }
+
+    function loadEventsFromStorage() {
+      const stored = JSON.parse(localStorage.getItem("calendarEvents") || "[]");
+      stored.forEach(({ title, date }) => {
+        calendar.addEvent({ title, start: date, allDay: true });
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
         initialView: 'dayGridMonth',
@@ -212,9 +215,10 @@
         altFormat: "F j, Y",
         dateFormat: "Y-m-d"
       });
+
+      loadEventsFromStorage(); // Load on init
     });
 
-    // Add Event Popup Functions
     function openAddPopup() {
       document.getElementById("add-popup").style.display = "flex";
       document.getElementById("overlay").style.display = "block";
@@ -236,13 +240,13 @@
           start: date,
           allDay: true
         });
+        saveEventsToStorage(); // Save after adding
         closeAddPopup();
       } else {
         alert("Please enter both a title and date.");
       }
     }
 
-    // Edit Popup Functions
     function openEditPopup() {
       const events = calendar.getEvents();
       const listContainer = document.getElementById("event-list");
@@ -261,7 +265,8 @@
           delBtn.textContent = "❌";
           delBtn.onclick = () => {
             event.remove();
-            openEditPopup(); // refresh list
+            saveEventsToStorage(); // Save after deletion
+            openEditPopup(); // Refresh list
           };
           div.appendChild(title);
           div.appendChild(delBtn);
