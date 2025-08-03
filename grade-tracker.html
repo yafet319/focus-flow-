@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grade Tracker</title>
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" />
@@ -9,47 +9,63 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    #grade-input-modal, #new-subject-modal, #set-goal-modal {
     #grade-input-modal, #new-subject-modal, #set-goal-modal, #graph-modal {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 50;
-    }
-  </style>
-</head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-
-  <div class="container mx-auto p-6 flex-grow">
-    <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-6">Your Grades</h1>
+@@ -23,163 +25,141 @@ <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-6">Your Grades</
     <div id="subjects-list" class="space-y-6"></div>
   </div>
 
+  <!-- Floating Set Goal Button - way higher -->
+  <button onclick="openSetGoalModal()" 
+    style="position: fixed; bottom: 100px; right: 24px; background-color: #f6e05e; color: #1a202c; border-radius: 9999px; padding: 1.25rem; box-shadow: 0 10px 15px -3px rgba(202, 138, 4, 0.5); display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; z-index: 9999;"
+    onmouseover="this.style.backgroundColor='#d69e2e'" onmouseout="this.style.backgroundColor='#f6e05e'">
+    <i class="fas fa-bullseye" style="font-size: 1.25rem;"></i>
+    <span>Set Goal</span>
   <!-- Floating Buttons -->
   <button onclick="openSetGoalModal()" class="fixed bottom-[100px] right-6 bg-yellow-400 text-gray-900 rounded-full p-5 shadow-md z-50 hover:bg-yellow-500 flex items-center gap-2">
     <i class="fas fa-bullseye text-xl"></i><span>Set Goal</span>
   </button>
+
+  <!-- Floating Add New Subject Button -->
+  <button onclick="openNewSubjectModal()" 
+    style="position: fixed; bottom: 40px; right: 24px; background-color: #3182ce; color: white; border-radius: 9999px; padding: 1.25rem; box-shadow: 0 10px 15px -3px rgba(49, 130, 206, 0.5); display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; z-index: 9999;"
+    onmouseover="this.style.backgroundColor='#2c5282'" onmouseout="this.style.backgroundColor='#3182ce'">
+    <span style="font-size: 1.5rem; line-height: 1;">+</span>
+    <span>Add New Subject</span>
   <button onclick="openNewSubjectModal()" class="fixed bottom-10 right-6 bg-blue-600 text-white rounded-full p-5 shadow-md z-50 hover:bg-blue-700 flex items-center gap-2">
     <span class="text-2xl">+</span><span>Add Subject</span>
   </button>
 
+  <!-- Bottom Navigation Bar (matching homepage style) -->
   <!-- Bottom Navigation Bar -->
   <nav class="bg-white shadow-md p-4 flex justify-around items-center fixed bottom-0 w-full z-40">
     <a href="upcoming.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-clock text-2xl"></i>
+      <span class="text-sm">Upcoming</span>
       <i class="fas fa-clock text-2xl"></i><span class="text-sm">Upcoming</span>
     </a>
     <a href="index.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-home text-2xl"></i>
+      <span class="text-sm">Home</span>
       <i class="fas fa-home text-2xl"></i><span class="text-sm">Home</span>
     </a>
     <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-chart-line text-2xl"></i>
+      <span class="text-sm">Grade Tracker</span>
       <i class="fas fa-chart-line text-2xl"></i><span class="text-sm">Grade Tracker</span>
     </a>
-   <a href="calendar.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
-      <i class="fas fa-calendar-alt text-xl mb-1"></i>
-      Calendar
+    <a href="calander.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-trophy text-2xl"></i>
+      <span class="text-sm">calander</span>
+    <a href="calendar.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
+      <i class="fas fa-calendar-alt text-2xl"></i><span class="text-sm">Calendar</span>
     </a>
   </nav>
 
+  <!-- Grade Input Modal -->
   <!-- Modals (Grade Input, New Subject, Goal, Graph) -->
   <div id="grade-input-modal" class="flex items-center justify-center">
     <div class="bg-white p-8 rounded-xl shadow-lg w-96">
@@ -57,29 +73,44 @@
       <label for="grade" class="block mb-4 text-lg font-medium text-gray-600">Enter Grade (%)</label>
       <input type="number" id="grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="Enter grade" max="100" min="0" />
       <div class="flex justify-between gap-4">
+        <button onclick="submitGrade()" class="bg-blue-600 text-white px-6 py-2 rounded-full w-full transition-all hover:bg-blue-700">Submit</button>
+        <button onclick="closeGradeInput()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
         <button onclick="submitGrade()" class="bg-blue-600 text-white px-6 py-2 rounded-full w-full hover:bg-blue-700">Submit</button>
         <button onclick="closeGradeInput()" class="text-red-500 px-6 py-2 border-2 border-red-500 rounded-full w-full hover:bg-red-500 hover:text-white">Cancel</button>
       </div>
     </div>
   </div>
 
+  <!-- New Subject Modal -->
   <div id="new-subject-modal" class="flex items-center justify-center">
     <div class="bg-white p-8 rounded-xl shadow-lg w-96">
       <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Add New Subject</h2>
+      <label for="subject-name" class="block mb-4 text-lg font-medium text-gray-600">Subject Name</label>
+      <input type="text" id="subject-name" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. History" />
+      <label for="subject-grade" class="block mb-4 text-lg font-medium text-gray-600">Current Grade (%)</label>
+      <input type="number" id="subject-grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. 92" max="100" min="0" />
       <input type="text" id="subject-name" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="Subject name" />
       <input type="number" id="subject-grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="Initial grade (%)" max="100" min="0" />
       <div class="flex justify-between gap-4">
+        <button onclick="addSubject()" class="bg-blue-600 text-white px-6 py-2 rounded-full w-full transition-all hover:bg-blue-700">Add</button>
+        <button onclick="closeNewSubjectModal()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
         <button onclick="addSubject()" class="bg-blue-600 text-white px-6 py-2 rounded-full w-full hover:bg-blue-700">Add</button>
         <button onclick="closeNewSubjectModal()" class="text-red-500 px-6 py-2 border-2 border-red-500 rounded-full w-full hover:bg-red-500 hover:text-white">Cancel</button>
       </div>
     </div>
   </div>
 
+  <!-- Set Goal Modal -->
   <div id="set-goal-modal" class="flex items-center justify-center">
     <div class="bg-white p-8 rounded-xl shadow-lg w-96">
+      <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Set Your Grade Goal (%)</h2>
+      <label for="goal-grade" class="block mb-4 text-lg font-medium text-gray-600">Goal Percentage</label>
+      <input type="number" id="goal-grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="e.g. 85" max="100" min="0" />
       <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Set Grade Goal</h2>
       <input type="number" id="goal-grade" class="p-4 border-2 border-gray-300 rounded-lg w-full mb-4" placeholder="Goal (%)" max="100" min="0" />
       <div class="flex justify-between gap-4">
+        <button onclick="submitGoal()" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-full w-full transition-all hover:bg-yellow-500">Set Goal</button>
+        <button onclick="closeSetGoalModal()" class="text-red-500 px-6 py-2 rounded-full border-2 border-red-500 w-full transition-all hover:bg-red-500 hover:text-white">Cancel</button>
         <button onclick="submitGoal()" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-full w-full hover:bg-yellow-500">Set Goal</button>
         <button onclick="closeSetGoalModal()" class="text-red-500 px-6 py-2 border-2 border-red-500 rounded-full w-full hover:bg-red-500 hover:text-white">Cancel</button>
       </div>
@@ -97,6 +128,15 @@
   <!-- Scripts -->
   <script>
     let selectedSubject = '';
+    // Force clear any cached subjects & goal on first load to avoid confusion
+    if (!localStorage.getItem('subjects')) {
+      localStorage.setItem('subjects', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('gradeGoal')) {
+      localStorage.removeItem('gradeGoal');
+    }
+
+    let gradeGoal = localStorage.getItem('gradeGoal') ? parseFloat(localStorage.getItem('gradeGoal')) : null;
     let chart = null;
 
     function loadSubjects() {
@@ -105,23 +145,42 @@
       const list = document.getElementById('subjects-list');
       list.innerHTML = '';
 
+      subjects.sort((a, b) => b.grade - a.grade);
+
       subjects.forEach((subject, index) => {
+        // Determine background color based on goal
+        let bgClass = "bg-white";
+        if (gradeGoal !== null) {
         let bg = 'bg-white';
         if (gradeGoal) {
           const diff = gradeGoal - subject.grade;
+          if (diff > 15) {
+            bgClass = "bg-red-100"; // red tint for >15% below goal
+          } else if (diff > 5) {
+            bgClass = "bg-yellow-100"; // yellow tint for 5-15% below goal
+          }
           if (diff > 15) bg = 'bg-red-100';
           else if (diff > 5) bg = 'bg-yellow-100';
         }
 
         const div = document.createElement('div');
+        div.className = `${bgClass} p-6 rounded-xl shadow-lg flex justify-between items-center hover:bg-blue-50 transition-all`;
         div.className = `${bg} p-6 rounded-xl shadow flex justify-between items-center`;
 
         div.innerHTML = `
+          <div class="flex items-center">
+            <span class="text-xl font-semibold text-gray-800 mr-4">${index + 1}.</span>
+            <div>
+              <h2 class="text-xl font-semibold text-gray-800">${subject.name}</h2>
+              <p class="text-sm text-gray-500">Current Grade: <span id="${subject.name}-grade" class="font-bold">${subject.grade}%</span></p>
+            </div>
           <div>
             <h2 class="text-xl font-semibold text-gray-800">${index + 1}. ${subject.name}</h2>
             <p class="text-sm text-gray-600">Grade: ${subject.grade}%</p>
           </div>
           <div class="flex gap-2">
+            <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 hover:text-white hover:bg-blue-600 transition-all px-4 py-2 rounded-full border-2 border-blue-600">Add Grade</button>
+            <button onclick="deleteSubject('${subject.name}')" class="text-red-600 hover:text-white hover:bg-red-600 transition-all px-4 py-2 rounded-full border-2 border-red-600">Delete</button>
             <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 border-2 border-blue-600 px-4 py-1 rounded-full hover:bg-blue-600 hover:text-white">Add Grade</button>
             <button onclick="viewGraph('${subject.name}')" class="text-green-600 border-2 border-green-600 px-4 py-1 rounded-full hover:bg-green-600 hover:text-white">View Graph</button>
             <button onclick="deleteSubject('${subject.name}')" class="text-red-600 border-2 border-red-600 px-4 py-1 rounded-full hover:bg-red-600 hover:text-white">Delete</button>
@@ -131,6 +190,9 @@
       });
     }
 
+    function openGradeInput(subject) {
+      selectedSubject = subject;
+      document.getElementById('grade-input-modal').style.display = 'flex';
     function openGradeInput(name) {
       selectedSubject = name;
       document.getElementById('grade').value = '';
@@ -142,6 +204,18 @@
     }
 
     function submitGrade() {
+      const newGrade = parseFloat(document.getElementById('grade').value);
+      if (!isNaN(newGrade) && newGrade >= 0 && newGrade <= 100) {
+        const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        const subject = subjects.find(sub => sub.name === selectedSubject);
+        if (subject) {
+          subject.grade = newGrade.toFixed(2);
+          localStorage.setItem('subjects', JSON.stringify(subjects));
+          loadSubjects();
+          closeGradeInput();
+        }
+      } else {
+        alert("Please enter a valid grade (0-100).");
       const val = parseFloat(document.getElementById('grade').value);
       if (isNaN(val) || val < 0 || val > 100) return alert("Enter a valid grade.");
 
@@ -158,18 +232,31 @@
     }
 
     function openNewSubjectModal() {
+      document.getElementById('new-subject-modal').style.display = 'flex';
       document.getElementById('subject-name').value = '';
       document.getElementById('subject-grade').value = '';
       document.getElementById('new-subject-modal').style.display = 'flex';
     }
 
     function closeNewSubjectModal() {
-      document.getElementById('new-subject-modal').style.display = 'none';
-    }
-
+@@ -189,62 +169,87 @@ <h2 class="text-xl font-semibold text-gray-800">${subject.name}</h2>
     function addSubject() {
       const name = document.getElementById('subject-name').value.trim();
       const grade = parseFloat(document.getElementById('subject-grade').value);
+      if (name && !isNaN(grade) && grade >= 0 && grade <= 100) {
+        const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        // Avoid duplicates
+        if (subjects.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+          alert("Subject already exists.");
+          return;
+        }
+        subjects.push({ name, grade: grade.toFixed(2) });
+        localStorage.setItem('subjects', JSON.stringify(subjects));
+        loadSubjects();
+        closeNewSubjectModal();
+      } else {
+        alert("Please enter a valid subject and grade.");
+      }
       if (!name || isNaN(grade) || grade < 0 || grade > 100) return alert("Enter valid name and grade.");
 
       let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
@@ -182,6 +269,12 @@
     }
 
     function deleteSubject(name) {
+      if (confirm(`Are you sure you want to delete "${name}"?`)) {
+        let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+        subjects = subjects.filter(subject => subject.name !== name);
+        localStorage.setItem('subjects', JSON.stringify(subjects));
+        loadSubjects();
+      }
       if (!confirm(`Delete "${name}"?`)) return;
       let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
       subjects = subjects.filter(s => s.name !== name);
@@ -189,9 +282,11 @@
       loadSubjects();
     }
 
+    // Set Goal Modal functions
     function openSetGoalModal() {
       document.getElementById('goal-grade').value = localStorage.getItem('gradeGoal') || '';
       document.getElementById('set-goal-modal').style.display = 'flex';
+      document.getElementById('goal-grade').value = gradeGoal !== null ? gradeGoal : '';
     }
 
     function closeSetGoalModal() {
@@ -199,6 +294,15 @@
     }
 
     function submitGoal() {
+      const newGoal = parseFloat(document.getElementById('goal-grade').value);
+      if (!isNaN(newGoal) && newGoal >= 0 && newGoal <= 100) {
+        gradeGoal = newGoal.toFixed(2);
+        localStorage.setItem('gradeGoal', gradeGoal);
+        loadSubjects();
+        closeSetGoalModal();
+      } else {
+        alert("Please enter a valid goal grade (0-100).");
+      }
       const val = parseFloat(document.getElementById('goal-grade').value);
       if (isNaN(val) || val < 0 || val > 100) return alert("Enter valid goal.");
       localStorage.setItem('gradeGoal', val);
@@ -246,14 +350,14 @@
     }
 
     window.onload = () => {
+      // Clear cached subjects and goal on first load to ensure empty list if user wants fresh start
       if (!localStorage.getItem('subjects')) {
         localStorage.setItem('subjects', JSON.stringify([]));
       }
+      gradeGoal = localStorage.getItem('gradeGoal') ? parseFloat(localStorage.getItem('gradeGoal')) : null;
       loadSubjects();
     };
   </script>
+
 </body>
 </html>
-
-
-
