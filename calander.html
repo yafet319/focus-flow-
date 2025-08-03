@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Calendar</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
@@ -171,11 +172,12 @@
     </div>
   </div>
 
+  <!-- Bottom Navigation -->
   <nav>
-    <a href="upcoming.html"><i class="fas fa-clock"></i><span>Upcoming</span></a>
-    <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="grade-tracker.html"><i class="fas fa-chart-line"></i><span>Grades</span></a>
-    <a href="calendar.html"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
+    <a href="/upcoming.html"><i class="fas fa-clock"></i><span>Upcoming</span></a>
+    <a href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="/grade-tracker.html"><i class="fas fa-chart-line"></i><span>Grades</span></a>
+    <a href="/calendar.html"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
   </nav>
 
   <script>
@@ -216,7 +218,7 @@
         dateFormat: "Y-m-d"
       });
 
-      loadEventsFromStorage(); // Load on init
+      loadEventsFromStorage();
     });
 
     function openAddPopup() {
@@ -240,7 +242,7 @@
           start: date,
           allDay: true
         });
-        saveEventsToStorage(); // Save after adding
+        saveEventsToStorage();
         closeAddPopup();
       } else {
         alert("Please enter both a title and date.");
@@ -265,8 +267,8 @@
           delBtn.textContent = "❌";
           delBtn.onclick = () => {
             event.remove();
-            saveEventsToStorage(); // Save after deletion
-            openEditPopup(); // Refresh list
+            saveEventsToStorage();
+            openEditPopup(); // Refresh
           };
           div.appendChild(title);
           div.appendChild(delBtn);
