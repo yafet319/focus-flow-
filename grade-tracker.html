@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Grade Tracker</title>
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" />
@@ -44,7 +44,7 @@
     <a href="grade-tracker.html" class="flex flex-col items-center text-gray-700 hover:text-green-500">
       <i class="fas fa-chart-line text-2xl"></i><span class="text-sm">Grade Tracker</span>
     </a>
-   <a href="calendar.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
+    <a href="calendar.html" class="flex flex-col items-center text-sm font-medium text-slate-600 hover:text-blue-500">
       <i class="fas fa-calendar-alt text-xl mb-1"></i>
       Calendar
     </a>
@@ -100,35 +100,44 @@
     let chart = null;
 
     function loadSubjects() {
-      const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
-      const gradeGoal = parseFloat(localStorage.getItem('gradeGoal')) || null;
-      const list = document.getElementById('subjects-list');
-      list.innerHTML = '';
+      try {
+        const subjects = JSON.parse(localStorage.getItem('subjects') || '[]');
+        const gradeGoal = parseFloat(localStorage.getItem('gradeGoal')) || null;
+        const list = document.getElementById('subjects-list');
+        list.innerHTML = '';
 
-      subjects.forEach((subject, index) => {
-        let bg = 'bg-white';
-        if (gradeGoal) {
-          const diff = gradeGoal - subject.grade;
-          if (diff > 15) bg = 'bg-red-100';
-          else if (diff > 5) bg = 'bg-yellow-100';
-        }
+        subjects.forEach((subject, index) => {
+          if (!Array.isArray(subject.grades)) {
+            subject.grades = [subject.grade];
+          }
 
-        const div = document.createElement('div');
-        div.className = `${bg} p-6 rounded-xl shadow flex justify-between items-center`;
+          let bg = 'bg-white';
+          if (gradeGoal) {
+            const diff = gradeGoal - subject.grade;
+            if (diff > 15) bg = 'bg-red-100';
+            else if (diff > 5) bg = 'bg-yellow-100';
+          }
 
-        div.innerHTML = `
-          <div>
-            <h2 class="text-xl font-semibold text-gray-800">${index + 1}. ${subject.name}</h2>
-            <p class="text-sm text-gray-600">Grade: ${subject.grade}%</p>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 border-2 border-blue-600 px-4 py-1 rounded-full hover:bg-blue-600 hover:text-white">Add Grade</button>
-            <button onclick="viewGraph('${subject.name}')" class="text-green-600 border-2 border-green-600 px-4 py-1 rounded-full hover:bg-green-600 hover:text-white">View Graph</button>
-            <button onclick="deleteSubject('${subject.name}')" class="text-red-600 border-2 border-red-600 px-4 py-1 rounded-full hover:bg-red-600 hover:text-white">Delete</button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
+          const div = document.createElement('div');
+          div.className = `${bg} p-6 rounded-xl shadow flex justify-between items-center`;
+
+          div.innerHTML = `
+            <div>
+              <h2 class="text-xl font-semibold text-gray-800">${index + 1}. ${subject.name}</h2>
+              <p class="text-sm text-gray-600">Grade: ${subject.grade}%</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="openGradeInput('${subject.name}')" class="text-blue-600 border-2 border-blue-600 px-4 py-1 rounded-full hover:bg-blue-600 hover:text-white">Add Grade</button>
+              <button onclick="viewGraph('${subject.name}')" class="text-green-600 border-2 border-green-600 px-4 py-1 rounded-full hover:bg-green-600 hover:text-white">View Graph</button>
+              <button onclick="deleteSubject('${subject.name}')" class="text-red-600 border-2 border-red-600 px-4 py-1 rounded-full hover:bg-red-600 hover:text-white">Delete</button>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+      } catch (e) {
+        alert('Failed to load subjects. Try clearing local data.');
+        console.error(e);
+      }
     }
 
     function openGradeInput(name) {
@@ -145,10 +154,10 @@
       const val = parseFloat(document.getElementById('grade').value);
       if (isNaN(val) || val < 0 || val > 100) return alert("Enter a valid grade.");
 
-      let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+      let subjects = JSON.parse(localStorage.getItem('subjects') || '[]');
       const sub = subjects.find(s => s.name === selectedSubject);
       if (sub) {
-        if (!sub.grades) sub.grades = [];
+        if (!Array.isArray(sub.grades)) sub.grades = [];
         sub.grades.push(val);
         sub.grade = val;
         localStorage.setItem('subjects', JSON.stringify(subjects));
@@ -172,7 +181,7 @@
       const grade = parseFloat(document.getElementById('subject-grade').value);
       if (!name || isNaN(grade) || grade < 0 || grade > 100) return alert("Enter valid name and grade.");
 
-      let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+      let subjects = JSON.parse(localStorage.getItem('subjects') || '[]');
       if (subjects.some(s => s.name.toLowerCase() === name.toLowerCase())) return alert("Subject exists.");
 
       subjects.push({ name, grade, grades: [grade] });
@@ -183,7 +192,7 @@
 
     function deleteSubject(name) {
       if (!confirm(`Delete "${name}"?`)) return;
-      let subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+      let subjects = JSON.parse(localStorage.getItem('subjects') || '[]');
       subjects = subjects.filter(s => s.name !== name);
       localStorage.setItem('subjects', JSON.stringify(subjects));
       loadSubjects();
@@ -207,9 +216,12 @@
     }
 
     function viewGraph(subjectName) {
-      const subjects = JSON.parse(localStorage.getItem('subjects')) || [];
+      const subjects = JSON.parse(localStorage.getItem('subjects') || '[]');
       const subject = subjects.find(s => s.name === subjectName);
-      if (!subject) return;
+      if (!subject || !Array.isArray(subject.grades)) {
+        alert("No grade history to show.");
+        return;
+      }
 
       const ctx = document.getElementById('gradeChart').getContext('2d');
       if (chart) chart.destroy();
@@ -246,13 +258,8 @@
     }
 
     window.onload = () => {
-      if (!localStorage.getItem('subjects')) {
-        localStorage.setItem('subjects', JSON.stringify([]));
-      }
       loadSubjects();
     };
   </script>
 </body>
 </html>
-
-
