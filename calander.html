@@ -17,6 +17,7 @@
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #334E68;
+      padding-bottom: 100px;
     }
     .welcome-text {
       margin: 2rem 0 1rem;
@@ -174,10 +175,10 @@
 
   <!-- Bottom Navigation -->
   <nav>
-    <a href="/upcoming.html"><i class="fas fa-clock"></i><span>Upcoming</span></a>
-    <a href="/index.html"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="/grade-tracker.html"><i class="fas fa-chart-line"></i><span>Grades</span></a>
-    <a href="/calendar.html"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
+    <a href="upcoming.html"><i class="fas fa-clock"></i><span>Upcoming</span></a>
+    <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="grade-tracker.html"><i class="fas fa-chart-line"></i><span>Grades</span></a>
+    <a href="calendar.html"><i class="fas fa-calendar-alt"></i><span>Calendar</span></a>
   </nav>
 
   <script>
@@ -192,10 +193,18 @@
     }
 
     function loadEventsFromStorage() {
-      const stored = JSON.parse(localStorage.getItem("calendarEvents") || "[]");
-      stored.forEach(({ title, date }) => {
-        calendar.addEvent({ title, start: date, allDay: true });
-      });
+      try {
+        const stored = JSON.parse(localStorage.getItem("calendarEvents") || "[]");
+        if (Array.isArray(stored)) {
+          stored.forEach(({ title, date }) => {
+            if (title && date) {
+              calendar.addEvent({ title, start: date, allDay: true });
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error loading calendar events:", err);
+      }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -234,7 +243,7 @@
     }
 
     function addEvent() {
-      const title = document.getElementById("event-title").value;
+      const title = document.getElementById("event-title").value.trim();
       const date = document.getElementById("event-date").value;
       if (title && date) {
         calendar.addEvent({
@@ -245,7 +254,7 @@
         saveEventsToStorage();
         closeAddPopup();
       } else {
-        alert("Please enter both a title and date.");
+        alert("Please enter both a title and a date.");
       }
     }
 
